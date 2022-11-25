@@ -25,11 +25,16 @@ async function run(){
 
           const productCollection = client.db('usedphone').collection('product');
 
+
+          app.get('/product', async (req, res)=>{
+               const query = {}
+               const cursor = productCollection.find(query)
+               const product = await cursor.toArray()
+               res.send(product)
+          })
           app.get('/category/:id', async (req, res)=>{
                const id = req.params.id;
-               console.log(id)
                const query = {category_id: id};
-               console.log(query)
                const cursor =  productCollection.find(query);
                const product = await cursor.toArray()
                res.send(product)
