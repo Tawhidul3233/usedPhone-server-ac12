@@ -51,6 +51,28 @@ async function run(){
                res.send(orders)
           })
 
+          app.get('/user', async (req, res)=>{
+               const email = req.query.email;
+               const cursor = {email:email}
+               const result = await usersCollection.find(cursor);
+               const orders = await result.toArray()
+               res.send(orders)
+          })
+
+          app.get('/product', async (req, res)=>{
+               const email = req.query.email;
+               const cursor = {email:email}
+               const result = await productCollection.find(cursor);
+               const orders = await result.toArray()
+               res.send(orders)
+          })
+
+          app.post('/product', async(req, res)=>{
+               const product = req.body;
+               const result = await productCollection.insertOne(product);
+               res.send(result)
+          })
+
           app.post('/users', async(req, res)=>{
                const user = req.body;
                const query = {email: user.email};
@@ -59,6 +81,7 @@ async function run(){
                const result = await usersCollection.insertOne(user)
                res.send(result)
           })
+
 
           app.post('/orders', async (req, res)=>{
                const order = req.body;
