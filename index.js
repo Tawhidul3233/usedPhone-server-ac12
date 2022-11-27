@@ -1,6 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+const { query } = require('express');
 
 require('dotenv').config()
 
@@ -42,11 +43,23 @@ async function run(){
 
           })
 
-          // app.post('/users', async(req, res)=>{
-          //      const user = req.body;
-          //      const result = await usersCollection.insertOne(user)
-          //      res.send(result)
-          // })
+          app.get(`/users/${query}`, async (req, res)=>{
+               const email = req.query;
+               console.log(email)
+               const cursor = {email:email}
+               const result = await ordersCollection.find(cursor);
+               const orders = await result.toArray()
+               res.send(orders)
+          })
+
+          app.post('/users', async(req, res)=>{
+               const user = req.body;
+               const query = {email: user.email};
+               const cursor = await usersCollection.findOne(query);
+               if(cursor) return ;
+               const result = await usersCollection.insertOne(user)
+               res.send(result)
+          })
 
           app.post('/orders', async (req, res)=>{
                const order = req.body;
