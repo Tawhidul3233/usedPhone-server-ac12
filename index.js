@@ -7,7 +7,7 @@ require('dotenv').config()
 const app = express();
 const port = process.env.PORT || 5000 ;
 
-// medill wares
+// medillwares
 
 app.use(cors());
 app.use(express.json());
@@ -22,7 +22,9 @@ async function run(){
      try{
 
           const productCollection = client.db('usedphone').collection('product');
-          const categoryCollection = client.db('usedphone').collection('categories')
+          const categoryCollection = client.db('usedphone').collection('categories');
+          const usersCollection = client.db('usedphone').collection('users');
+          const ordersCollection = client.db('usedphone').collection('orders');
 
           app.get('/categories', async (req, res)=>{
                const query = {};
@@ -38,6 +40,18 @@ async function run(){
                const product = await cursor.toArray()
                res.send(product)
 
+          })
+
+          // app.post('/users', async(req, res)=>{
+          //      const user = req.body;
+          //      const result = await usersCollection.insertOne(user)
+          //      res.send(result)
+          // })
+
+          app.post('/orders', async (req, res)=>{
+               const order = req.body;
+               const result = await ordersCollection.insertOne(order)
+               res.send(result)
           })
 
      }
