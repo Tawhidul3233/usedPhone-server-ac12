@@ -43,7 +43,7 @@ async function run(){
 
           })
 
-          app.get('/users', async (req, res)=>{
+          app.get('/order', async (req, res)=>{
                const email = req.query.email;
                const cursor = {email:email}
                const result = await ordersCollection.find(cursor);
@@ -66,6 +66,15 @@ async function run(){
                const orders = await result.toArray()
                res.send(orders)
           })
+
+          
+          app.get('/allseller', async(req, res)=> {
+               const query = {usertype: 'seller'}
+               const sellers = await usersCollection.find(query).toArray()
+               res.send(sellers)
+          })
+
+
 
           app.post('/product', async(req, res)=>{
                const product = req.body;
