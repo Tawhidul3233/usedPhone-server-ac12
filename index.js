@@ -22,10 +22,11 @@ async function run(){
 
      try{
 
-          const productCollection = client.db('usedphone').collection('product');
           const categoryCollection = client.db('usedphone').collection('categories');
+          const productCollection = client.db('usedphone').collection('product');
           const usersCollection = client.db('usedphone').collection('users');
           const ordersCollection = client.db('usedphone').collection('orders');
+          const wishListCollection = client.db('usedphone').collection('wishlist')
 
           app.get('/categories', async (req, res)=>{
                const query = {};
@@ -67,13 +68,25 @@ async function run(){
                res.send(orders)
           })
 
-          
+
           app.get('/allseller', async(req, res)=> {
                const query = {usertype: 'seller'}
                const sellers = await usersCollection.find(query).toArray()
                res.send(sellers)
           })
 
+          app.get('/allbuyer', async(req, res)=> {
+               const query = {usertype: 'buyer'}
+               const buyers = await usersCollection.find(query).toArray()
+               res.send(buyers)
+          })
+
+          app.get('/wishlist', async(req, res)=>{
+               const email = req.query.email;
+               const cursor = {email:email};
+               const result = await wishListCollection.find(cursor).toArray();
+               res.send(result);
+          })
 
 
           app.post('/product', async(req, res)=>{
@@ -95,6 +108,12 @@ async function run(){
           app.post('/orders', async (req, res)=>{
                const order = req.body;
                const result = await ordersCollection.insertOne(order)
+               res.send(result)
+          })
+
+          app.post('/wishlist', async ( req, res)=>{
+               const wishlist = req.body;
+               const result = await wishListCollection.insertOne(wishlist)
                res.send(result)
           })
 
