@@ -27,6 +27,9 @@ async function run(){
           const usersCollection = client.db('usedphone').collection('users');
           const ordersCollection = client.db('usedphone').collection('orders');
           const wishListCollection = client.db('usedphone').collection('wishlist')
+          const advertisedCollection = client.db('usedphone').collection('advertised')
+
+          
 
           app.get('/categories', async (req, res)=>{
                const query = {};
@@ -88,6 +91,15 @@ async function run(){
                res.send(result);
           })
 
+          app.get('/advertised', async(req, res)=>{
+               const query = {}
+               const advertised = await advertisedCollection.find(query).toArray()
+               res.send(advertised)
+          })
+
+
+
+
 
           app.post('/product', async(req, res)=>{
                const product = req.body;
@@ -114,6 +126,12 @@ async function run(){
           app.post('/wishlist', async ( req, res)=>{
                const wishlist = req.body;
                const result = await wishListCollection.insertOne(wishlist)
+               res.send(result)
+          })
+
+          app.post('/advertised', async (req, res)=>{
+               const advertised = req.body;
+               const result = await advertisedCollection.insertOne(advertised)
                res.send(result)
           })
 
